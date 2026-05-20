@@ -17,7 +17,8 @@ jobs:
       - name: Copy .env from runner
         run: |
           if [ -f /etc/runner-configs/.env ]; then
-            cp /etc/runner-configs/.env .env
+            mkdir -p config/env
+            cp /etc/runner-configs/.env config/env/.env
           else
             echo ".env file not found in /etc/runner-configs/"
             exit 1
@@ -26,4 +27,4 @@ jobs:
       - name: Deploy with Docker Compose
         run: |
           make stop
-          make startd
+          make startd ARGS=--build
