@@ -43,11 +43,11 @@ WEB_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
 CORS_ORIGINS=https://${{RAILWAY_PUBLIC_DOMAIN}}
 DATABASE_URL=postgresql+asyncpg://${{Postgres.PGUSER}}:${{Postgres.PGPASSWORD}}@${{Postgres.PGHOST}}:${{Postgres.PGPORT}}/${{Postgres.PGDATABASE}}
 REDIS_URL=${{Redis.REDIS_URL}}
-MINIO_ENDPOINT=${{collabst.ENDPOINT}}
-MINIO_PUBLIC_ENDPOINT=${{collabst.ENDPOINT}}
-MINIO_ACCESS_KEY=${{collabst.ACCESS_KEY_ID}}
-MINIO_SECRET_KEY=${{collabst.SECRET_ACCESS_KEY}}
-MINIO_BUCKET_NAME=${{collabst.BUCKET}}
+MINIO_ENDPOINT=${{Assets.ENDPOINT}}
+MINIO_PUBLIC_ENDPOINT=${{Assets.ENDPOINT}}
+MINIO_ACCESS_KEY=${{Assets.ACCESS_KEY_ID}}
+MINIO_SECRET_KEY=${{Assets.SECRET_ACCESS_KEY}}
+MINIO_BUCKET_NAME=${{Assets.BUCKET}}
 MINIO_SECURE=true
 MINIO_PUBLIC_SECURE=true
 SECRET_KEY=${{secret(64)}}
@@ -71,7 +71,7 @@ Railway gives Collabst a complete hosting stack without requiring users to hand-
 ## Publish Checklist
 
 1. Create the template from the working Railway project.
-2. In the template composer, confirm the services are named `collabst`, `Postgres`, `Redis`, and `collabst` bucket.
+2. In the template composer, confirm the services are named `Collabst`, `Postgres`, `Redis`, and rename the bucket to `Assets`.
 3. Replace any copied literal secrets with template functions or reference variables from `.env.railway.example`.
 4. Confirm the `collabst` service has public HTTP networking enabled.
 5. Confirm the service healthcheck is `/api/v1/health`.
