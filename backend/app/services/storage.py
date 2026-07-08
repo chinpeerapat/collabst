@@ -1,27 +1,38 @@
 from typing import BinaryIO
+from urllib.parse import urlparse
+
 from minio import Minio
 from minio.error import S3Error
 from app.core.config import settings
 
 
+def _normalize_minio_endpoint(endpoint: str) -> str:
+    parsed = urlparse(endpoint)
+    if parsed.scheme and parsed.netloc:
+        return parsed.netloc
+    return endpoint.removeprefix("http://").removeprefix("https://").rstrip("/")
+
+
 class StorageService:
     def __init__(self):
-        print(settings.MINIO_ENDPOINT, settings.MINIO_PUBLIC_ENDPOINT)
+        endpoint = _normalize_minio_endpoint(settings.MINIO_ENDPOINT)
+        public_endpoint = _normalize_minio_endpoint(settings.MINIO_PUBLIC_ENDPOINT)
+        print(endpoint, public_endpoint)
         self.client = Minio(
-            settings.MINIO_ENDPOINT,
+            endpoint,
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
             secure=settings.MINIO_SECURE,
         )
-        print("Initialized MinIO client with endpoint:", settings.MINIO_ENDPOINT)
+        print("Initialized MinIO client with endpoint:", endpoint)
         self.public_client = Minio(
-            settings.MINIO_PUBLIC_ENDPOINT,
+            public_endpoint,
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
             secure=settings.MINIO_PUBLIC_SECURE,
             region="us-east-1",
         )
-        print("Initialized public MinIO client with endpoint:", settings.MINIO_ENDPOINT)
+        print("Initialized public MinIO client with endpoint:", public_endpoint)
         self.bucket_name = settings.MINIO_BUCKET_NAME
         self._ensure_bucket_exists()
 
